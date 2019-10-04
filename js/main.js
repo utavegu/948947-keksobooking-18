@@ -1,152 +1,89 @@
 'use strict';
 
 var COUNT_OF_ADVERT = 8;
+var FIELD_WIDTH = 1200;
+var FIELD_MIN_HEIGHT = 130;
+var FIELD_MAX_HEIGHT = 630;
+var MOCK_UPPER_BOUND = 20;
+var TITLES = ['Бюджетная Харчевня', 'Таверна УО', 'Царская забегаловка', 'Элитарный клоповник', 'Свободная комната в профурсетской', 'Вписка "У корешей"', 'Под картонкой у бомжа', 'Туалет кинотеатра'];
+var DESCRIPTIONS = ['Клопы тут не кусают... сытые', 'Мешают кутилы и профурсетки? Заткни уши!', '3 доллара или шкалик сивухи', 'Таверна без драки, деньги на ветер', 'Взятку сторожу и проходи', 'Бесплатно, если скажешь, что корешь лохматого', 'Туалет в 20-ой комнате'];
+var TYPES = ['palace', 'flat', 'house', 'bungalo'];
+var CHECKINS = ['12:00', '13:00', '14:00'];
+var CHECKOUTS = ['12:00', '13:00', '14:00'];
+var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
-var AVATAR = [
-  '01',
-  '02',
-  '03',
-  '04',
-  '05',
-  '06',
-  '07',
-  '08'
-];
+// ФУНКЦИЯ генерации индексов аватаров
+var generateAvatarIndexes = function (countIndexes) {
+  var resultVariable = [];
+  for (var i = 1; i <= countIndexes; i++) {
+    resultVariable.push('0' + i);
+  }
+  return resultVariable;
+};
 
-var TITLE = [
-  'Бюджетная Харчевня',
-  'Таверна УО',
-  'Царская забегаловка',
-  'Элитарный клоповник',
-  'Свободная комната в профурсетской',
-  'Вписка "У корешей"',
-  'Под картонкой у бомжа',
-  'Туалет кинотеатра'
-];
+// ФУНКЦИЯ, генерирующая произвольный целочисленный мок
+var generateRandomIntegerMocks = function (countIndexes) {
+  var resultVariable = [];
+  for (var i = 0; i < countIndexes; i++) {
+    var coord = Math.floor(Math.random() * MOCK_UPPER_BOUND);
+    resultVariable.push(coord);
+  }
+  return resultVariable;
+};
 
-var ADDRESS = [
-  '600, 350',
-  '1100, 300',
-  '800, 600',
-  '620, 480',
-  '100, 300',
-  '400, 500',
-  '900, 650',
-  '600, 350',
-  '700, 200'
-];
+// ФУНКЦИЯ генерации координаты X
+var generateCoordinateX = function (countIndexes) {
+  var resultVariable = [];
+  for (var i = 0; i < countIndexes; i++) {
+    var coord = Math.floor(Math.random() * FIELD_WIDTH);
+    resultVariable.push(coord);
+  }
+  return resultVariable;
+};
 
-var PRICE = [
-  3,
-  5,
-  8.5,
-  12,
-  9.99,
-  15,
-  50,
-  33
-];
+// ФУНКЦИЯ генерации координаты Y
+var generateCoordinateY = function (countIndexes) {
+  var resultVariable = [];
+  for (var i = 0; i < countIndexes; i++) {
+    var coord = FIELD_MIN_HEIGHT + Math.floor(Math.random() * (FIELD_MAX_HEIGHT - FIELD_MIN_HEIGHT));
+    resultVariable.push(coord);
+  }
+  return resultVariable;
+};
 
-var TYPE = [
-  'palace',
-  'flat',
-  'house',
-  'bungalo'
-];
+// ФУНКЦИЯ генерации адреса
+var generateAddresses = function (countIndexes) {
+  var resultVariable = [];
+  for (var i = 0; i < countIndexes; i++) {
+    var address = String(coordinatesX[i]) + ', ' + String(coordinatesY[i]);
+    resultVariable.push(address);
+  }
+  return resultVariable;
+};
 
-var ROOMS = [
-  0,
-  1,
-  2,
-  3,
-  4,
-  5,
-  20
-];
+var avatars = generateAvatarIndexes(COUNT_OF_ADVERT);
+var prices = generateRandomIntegerMocks(COUNT_OF_ADVERT);
+var rooms = generateRandomIntegerMocks(COUNT_OF_ADVERT);
+var guests = generateRandomIntegerMocks(COUNT_OF_ADVERT);
+var coordinatesX = generateCoordinateX(COUNT_OF_ADVERT);
+var coordinatesY = generateCoordinateY(COUNT_OF_ADVERT);
+var addreses = generateAddresses(COUNT_OF_ADVERT);
 
-var GUESTS = [
-  1,
-  2,
-  3,
-  4,
-  6,
-  8,
-  10,
-  15,
-  20,
-  50
-];
+// ФУНКЦИЯ, ищущая и удаляющая класс
+var showSomeElement = function (desiredSelector, deletedClass) {
+  var mapElement = document.querySelector(desiredSelector);
+  mapElement.classList.remove(deletedClass);
+};
 
-var CHECKIN = [
-  '12:00',
-  '13:00',
-  '14:00'
-];
+showSomeElement('.map', 'map--faded');
 
-var CHECKOUT = [
-  '12:00',
-  '13:00',
-  '14:00'
-];
-
-var FEATURES = [
-  'wifi',
-  'dishwasher',
-  'parking',
-  'washer',
-  'elevator',
-  'conditioner'
-];
-
-var DESCRIPTION = [
-  'Клопы тут не кусают... сытые',
-  'Мешают кутилы и профурсетки? Заткни уши!',
-  '3 доллара или шкалик сивухи',
-  'Таверна без драки, деньги на ветер',
-  'Взятку сторожу и проходи',
-  'Бесплатно, если скажешь, что корешь лохматого',
-  'Туалет в 20-ой комнате'
-];
-
-var PHOTOS = [
-  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-];
-
-var COORDINATE_X = [
-  150,
-  280,
-  340,
-  470,
-  590,
-  670,
-  800,
-  1020
-];
-
-var COORDINATE_Y = [
-  140,
-  205,
-  310,
-  405,
-  508,
-  547,
-  583,
-  625
-];
-
-var mapElement = document.querySelector('.map ');
-mapElement.classList.remove('map--faded');
-
-// Функция получения рандомного индекса элемента массива
+// ФУНКЦИЯ получения рандомного индекса элемента массива
 var getRandomIndexElement = function (arr) {
   var minIndex = 0;
   var maxIndex = arr.length;
   return Math.floor(Math.random() * ((maxIndex - minIndex) + minIndex));
 };
-
-// ПОЧИНИ, ЧТОБЫ НЕ БЫЛО ПОВТОРНЫХ ЭЛЕМЕНТОВ... пока не чини, гуру одобряет
 
 // ФУНКЦИЯ получения рандомного элемента массива
 var getRandomArrayElement = function (arr) {
@@ -160,90 +97,64 @@ var createAdvert = function (countOfAdvert) {
   for (var i = 0; i < countOfAdvert; i++) {
     advert.push({
       author: {
-        avatar: getRandomArrayElement(AVATAR)
+        avatar: getRandomArrayElement(avatars)
       },
       offer: {
-        title: getRandomArrayElement(TITLE),
-        address: getRandomArrayElement(ADDRESS),
-        price: getRandomArrayElement(PRICE),
-        type: getRandomArrayElement(TYPE),
-        rooms: getRandomArrayElement(ROOMS),
-        guests: getRandomArrayElement(GUESTS),
-        checkin: getRandomArrayElement(CHECKIN),
-        checkout: getRandomArrayElement(CHECKOUT),
+        title: getRandomArrayElement(TITLES),
+        address: getRandomArrayElement(addreses),
+        price: getRandomArrayElement(prices),
+        type: getRandomArrayElement(TYPES),
+        rooms: getRandomArrayElement(rooms),
+        guests: getRandomArrayElement(guests),
+        checkin: getRandomArrayElement(CHECKINS),
+        checkout: getRandomArrayElement(CHECKOUTS),
         features: getRandomArrayElement(FEATURES),
-        description: getRandomArrayElement(DESCRIPTION),
+        description: getRandomArrayElement(DESCRIPTIONS),
         photos: getRandomArrayElement(PHOTOS)
       },
       location: {
-        x: getRandomArrayElement(COORDINATE_X),
-        y: getRandomArrayElement(COORDINATE_Y),
+        x: getRandomArrayElement(coordinatesX),
+        y: getRandomArrayElement(coordinatesY),
       },
     });
   }
   return advert;
 };
 
-window.advert = createAdvert(COUNT_OF_ADVERT);
+// window.advert = createAdvert(COUNT_OF_ADVERT);
+// var advertItems = window.advert;
+// Для чего нужен проброс переменной в глобальную область видимости?
+// Мой ответ "не знаю" - так тоже работает)) Я видимо что-то неправильно сделал (в синтаксическом плане) раз не работало в прошлый раз.
 
-var advertItems = window.advert;
+var advertItems = createAdvert(COUNT_OF_ADVERT);
 
-// Я ПОКА ОСТАВЛЮ ЭТОТ КОД, НА СЛУЧАЙ ЕСЛИ МОЯ ПОПЫТКА С ОБЪЕКТОМ - ШЛЯПА
-// ЭТО ВРОДЕ ФУНКЦИЯ-КОНСТРУКТОР КАК РАЗ... или нет?
-// var createAdvert = function (avatar, title, address, price, type, rooms, guests, checkin, checkout, features, description, photos, x, y, countOfAdvert) {
-//   var advert = [];
-//   for (var i = 0; i < countOfAdvert; i++) {
-//     advert.push({
-//       author: {
-//         avatar: getRandomArrayElement(avatar)
-//       },
-//       offer: {
-//         title: getRandomArrayElement(title),
-//         price: getRandomArrayElement(price),
-//         type: getRandomArrayElement(type),
-//         rooms: getRandomArrayElement(rooms),
-//         guests: getRandomArrayElement(guests),
-//         checkin: getRandomArrayElement(checkin),
-//         checkout: getRandomArrayElement(checkout),
-//         features: getRandomArrayElement(features),
-//         description: getRandomArrayElement(description),
-//         photos: getRandomArrayElement(photos)
-//       },
-//       location: {
-//         x: getRandomArrayElement(x),
-//         y: getRandomArrayElement(y),
-//       },
-//     });
-//   }
-//   return advert;
-// };
-//
-//
-// var advertItems = createAdvert(AVATAR, TITLE, ADDRESS, PRICE, TYPE, ROOMS, GUESTS, CHECKIN, CHECKOUT, FEATURES, DESCRIPTION, PHOTOS, COORDINATE_X, COORDINATE_Y, COUNT_OF_ADVERT);
+// console.log(advertItems);
 
-
-// Шаблон #pin
+// Шаблон #pin -- строка 232
 var similarMapPinTemplateElement = document.querySelector('#pin').content.querySelector('.map__pin');
 
-// Место для вставки шаблона #pin
+// Место для вставки шаблона #pin -- строка 22
 var similarMapPinsListElement = document.querySelector('.map__pins');
 
-// Функция отрисовки шаблона #pin
-var renderMapPinTemplate = function (innerAdvertItems) {
+// ФУНКЦИЯ отрисовки шаблона #pin
+var renderMapPinTemplate = function (innerAdvertItem) {
   var templateMapPinElement = similarMapPinTemplateElement.cloneNode(true);
-  templateMapPinElement.style.left = innerAdvertItems.location.x + 'px';
-  templateMapPinElement.style.top = innerAdvertItems.location.y + 'px';
-  templateMapPinElement.querySelector('img').src = innerAdvertItems.author.avatar;
-  templateMapPinElement.querySelector('img').alt = innerAdvertItems.offer.title;
-
+  templateMapPinElement.style.left = innerAdvertItem.location.x + 'px';
+  templateMapPinElement.style.top = innerAdvertItem.location.y + 'px';
+  templateMapPinElement.querySelector('img').src = innerAdvertItem.author.avatar;
+  templateMapPinElement.querySelector('img').alt = innerAdvertItem.offer.title;
   return templateMapPinElement;
 };
 
-// Вставка шаблона #pin в .map__pins
-var fragment = document.createDocumentFragment();
+// ФУНКЦИЯ вставки шаблона #pin в .map__pins
+var insertTemplate = function (arrayObjects, renderingTemplateFunction) {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < arrayObjects.length; i++) {
+    fragment.appendChild(renderingTemplateFunction(advertItems[i]));
+  }
+  similarMapPinsListElement.appendChild(fragment);
+};
 
-for (var i = 0; i < advertItems.length; i++) {
-  fragment.appendChild(renderMapPinTemplate(advertItems[i]));
-}
+insertTemplate(advertItems, renderMapPinTemplate);
 
-similarMapPinsListElement.appendChild(fragment);
+// В прошлый раз мне казалось, что я наплодил слишком дофига констант, теперь мне кажется что слишком дофига функций.
