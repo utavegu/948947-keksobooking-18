@@ -1,10 +1,9 @@
 'use strict';
 
-var COUNT_OF_ADVERT = 8;
-var FIELD_WIDTH = 1200;
-var FIELD_MIN_HEIGHT = 130;
-var FIELD_MAX_HEIGHT = 630;
-var MOCK_UPPER_BOUND = 20;
+var COUNT_OF_ADVERT = 8; // Количество объявлений
+var FIELD_MIN_HEIGHT = 130; // Минимальная высота на карте
+var FIELD_MAX_HEIGHT = 630; // Максимальная высота на карте
+var MOCKS = [1, 2, 3, 4, 5]; // Короче вот так я извернусь, но думаю тут обойдёмся без отдельной функции =)
 var TITLES = ['Бюджетная Харчевня', 'Таверна УО', 'Царская забегаловка', 'Элитарный клоповник', 'Свободная комната в профурсетской', 'Вписка "У корешей"', 'Под картонкой у бомжа', 'Туалет кинотеатра'];
 var DESCRIPTIONS = ['Клопы тут не кусают... сытые', 'Мешают кутилы и профурсетки? Заткни уши!', '3 доллара или шкалик сивухи', 'Таверна без драки, деньги на ветер', 'Взятку сторожу и проходи', 'Бесплатно, если скажешь, что корешь лохматого', 'Туалет в 20-ой комнате'];
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
@@ -13,30 +12,22 @@ var CHECKOUTS = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
-// ФУНКЦИЯ генерации индексов аватаров
-var generateAvatarIndexes = function (countIndexes) {
-  var resultVariable = [];
-  for (var i = 1; i <= countIndexes; i++) {
-    resultVariable.push('0' + i);
-  }
-  return resultVariable;
+// ФУНКЦИЯ, показывающая карту
+var showMapElement = function (desiredSelector, deletedClass) {
+  var mapElement = document.querySelector(desiredSelector);
+  mapElement.classList.remove(deletedClass);
 };
+showMapElement('.map', 'map--faded');
 
-// ФУНКЦИЯ, генерирующая произвольный целочисленный мок
-var generateRandomIntegerMocks = function (countIndexes) {
-  var resultVariable = [];
-  for (var i = 0; i < countIndexes; i++) {
-    var coord = Math.floor(Math.random() * MOCK_UPPER_BOUND);
-    resultVariable.push(coord);
-  }
-  return resultVariable;
-};
+// Определили ширину карты
+var map = document.querySelector('.map');
+var fieldWidth = map.clientWidth;
 
 // ФУНКЦИЯ генерации координаты X
 var generateCoordinateX = function (countIndexes) {
   var resultVariable = [];
   for (var i = 0; i < countIndexes; i++) {
-    var coord = Math.floor(Math.random() * FIELD_WIDTH);
+    var coord = Math.floor(Math.random() * fieldWidth);
     resultVariable.push(coord);
   }
   return resultVariable;
@@ -62,32 +53,19 @@ var generateAddresses = function (countIndexes) {
   return resultVariable;
 };
 
-var avatars = generateAvatarIndexes(COUNT_OF_ADVERT);
-var prices = generateRandomIntegerMocks(COUNT_OF_ADVERT);
-var rooms = generateRandomIntegerMocks(COUNT_OF_ADVERT);
-var guests = generateRandomIntegerMocks(COUNT_OF_ADVERT);
 var coordinatesX = generateCoordinateX(COUNT_OF_ADVERT);
 var coordinatesY = generateCoordinateY(COUNT_OF_ADVERT);
 var addreses = generateAddresses(COUNT_OF_ADVERT);
 
-// ФУНКЦИЯ, ищущая и удаляющая класс
-var showSomeElement = function (desiredSelector, deletedClass) {
-  var mapElement = document.querySelector(desiredSelector);
-  mapElement.classList.remove(deletedClass);
-};
+// console.log('Координаты X: ' + coordinatesX);
+// console.log('Координаты Y: ' + coordinatesY);
+// console.log('Адреса: ' + addreses);
 
-showSomeElement('.map', 'map--faded');
-
-// ФУНКЦИЯ получения рандомного индекса элемента массива
-var getRandomIndexElement = function (arr) {
+// ФУНКЦИЯ, возвращающая случайный элемент массива
+var getRandomArrayElement = function (arr) {
   var minIndex = 0;
   var maxIndex = arr.length;
-  return Math.floor(Math.random() * ((maxIndex - minIndex) + minIndex));
-};
-
-// ФУНКЦИЯ получения рандомного элемента массива
-var getRandomArrayElement = function (arr) {
-  var randomIndex = getRandomIndexElement(arr);
+  var randomIndex = Math.floor(Math.random() * ((maxIndex - minIndex) + minIndex));
   return arr[randomIndex];
 };
 
@@ -97,15 +75,15 @@ var createAdvert = function (countOfAdvert) {
   for (var i = 0; i < countOfAdvert; i++) {
     advert.push({
       author: {
-        avatar: getRandomArrayElement(avatars)
+        avatar: '0' + [i + 1]
       },
       offer: {
         title: getRandomArrayElement(TITLES),
         address: getRandomArrayElement(addreses),
-        price: getRandomArrayElement(prices),
+        price: getRandomArrayElement(MOCKS) * 3, // Ну чтоб хоть как-то на правду походило
         type: getRandomArrayElement(TYPES),
-        rooms: getRandomArrayElement(rooms),
-        guests: getRandomArrayElement(guests),
+        rooms: Math.floor(getRandomArrayElement(MOCKS) / 2), // Аналогично
+        guests: getRandomArrayElement(MOCKS),
         checkin: getRandomArrayElement(CHECKINS),
         checkout: getRandomArrayElement(CHECKOUTS),
         features: getRandomArrayElement(FEATURES),
@@ -121,13 +99,8 @@ var createAdvert = function (countOfAdvert) {
   return advert;
 };
 
-// window.advert = createAdvert(COUNT_OF_ADVERT);
-// var advertItems = window.advert;
-// Для чего нужен проброс переменной в глобальную область видимости?
-// Мой ответ "не знаю" - так тоже работает)) Я видимо что-то неправильно сделал (в синтаксическом плане) раз не работало в прошлый раз.
-
+// Массив объявлений (объектов)
 var advertItems = createAdvert(COUNT_OF_ADVERT);
-
 // console.log(advertItems);
 
 // Шаблон #pin -- строка 232
@@ -156,5 +129,3 @@ var insertTemplate = function (arrayObjects, renderingTemplateFunction) {
 };
 
 insertTemplate(advertItems, renderMapPinTemplate);
-
-// В прошлый раз мне казалось, что я наплодил слишком дофига констант, теперь мне кажется что слишком дофига функций.
