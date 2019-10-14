@@ -3,7 +3,6 @@
 var COUNT_OF_ADVERT = 8; // Количество объявлений
 var FIELD_MIN_HEIGHT = 130; // Минимальная высота на карте
 var FIELD_MAX_HEIGHT = 630; // Максимальная высота на карте
-var MOCKS = [1, 2, 3, 4, 5]; // Короче вот так я извернусь, но думаю тут обойдёмся без отдельной функции =)
 var TITLES = ['Бюджетная Харчевня', 'Таверна УО', 'Царская забегаловка', 'Элитарный клоповник', 'Свободная комната в профурсетской', 'Вписка "У корешей"', 'Под картонкой у бомжа', 'Туалет кинотеатра'];
 var DESCRIPTIONS = ['Клопы тут не кусают... сытые', 'Мешают кутилы и профурсетки? Заткни уши!', '3 доллара или шкалик сивухи', 'Таверна без драки, деньги на ветер', 'Взятку сторожу и проходи', 'Бесплатно, если скажешь, что корешь лохматого', 'Туалет в 20-ой комнате'];
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
@@ -57,9 +56,10 @@ var coordinatesX = generateCoordinateX(COUNT_OF_ADVERT);
 var coordinatesY = generateCoordinateY(COUNT_OF_ADVERT);
 var addreses = generateAddresses(COUNT_OF_ADVERT);
 
-// console.log('Координаты X: ' + coordinatesX);
-// console.log('Координаты Y: ' + coordinatesY);
-// console.log('Адреса: ' + addreses);
+var getRandomInteger = function (max, min) {
+  var minValue = min || 0;
+  return Math.round(minValue + Math.random() * (max - minValue));
+};
 
 // ФУНКЦИЯ, возвращающая случайный элемент массива
 var getRandomArrayElement = function (arr) {
@@ -75,15 +75,15 @@ var createAdvert = function (countOfAdvert) {
   for (var i = 0; i < countOfAdvert; i++) {
     advert.push({
       author: {
-        avatar: '0' + [i + 1]
+        avatar: 'img/avatars/user' + '0' + [i + 1] + '.png'
       },
       offer: {
         title: getRandomArrayElement(TITLES),
         address: getRandomArrayElement(addreses),
-        price: getRandomArrayElement(MOCKS) * 3, // Ну чтоб хоть как-то на правду походило
+        price: getRandomInteger(50),
         type: getRandomArrayElement(TYPES),
-        rooms: Math.floor(getRandomArrayElement(MOCKS) / 2), // Аналогично
-        guests: getRandomArrayElement(MOCKS),
+        rooms: getRandomInteger(5),
+        guests: getRandomInteger(15),
         checkin: getRandomArrayElement(CHECKINS),
         checkout: getRandomArrayElement(CHECKOUTS),
         features: getRandomArrayElement(FEATURES),
@@ -101,7 +101,6 @@ var createAdvert = function (countOfAdvert) {
 
 // Массив объявлений (объектов)
 var advertItems = createAdvert(COUNT_OF_ADVERT);
-// console.log(advertItems);
 
 // Шаблон #pin -- строка 232
 var similarMapPinTemplateElement = document.querySelector('#pin').content.querySelector('.map__pin');
