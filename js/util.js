@@ -2,16 +2,21 @@
 
 // Утилитный модуль
 // Содержит общие переменные и функции
+
 (function () {
-  var ESC_KEYCODE = 27;
-  var ENTER_KEYCODE = 13;
-  var SPACE_KEYCODE = 32;
+
+  var HotKey = {
+    ESC_KEYCODE: 27,
+    ENTER_KEYCODE: 13,
+    SPACE_KEYCODE: 32
+  };
 
   window.util = {
-    ESC_KEYCODE: ESC_KEYCODE,
-    ENTER_KEYCODE: ENTER_KEYCODE,
-    SPACE_KEYCODE: SPACE_KEYCODE
+    ESC_KEYCODE: HotKey.ESC_KEYCODE,
+    ENTER_KEYCODE: HotKey.ENTER_KEYCODE,
+    SPACE_KEYCODE: HotKey.SPACE_KEYCODE
   };
+
 })();
 
 /*
