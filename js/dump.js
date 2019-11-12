@@ -46,12 +46,12 @@
 
 
   // Сообщение об ошибке при загрузке данных с сервера
-  var logMessages = function (text) {
-  var errorTemplateElement = document.querySelector('#error').content.querySelector('.error');
-  var mainBlock = document.querySelector('main');
-  var templateMapPinElement = errorTemplateElement.cloneNode(true);
-  mainBlock.appendChild(templateMapPinElement);
-};
+  var logMessages = function () {
+    var errorTemplateElement = document.querySelector('#error').content.querySelector('.error');
+    var mainBlock = document.querySelector('main');
+    var templateMapPinElement = errorTemplateElement.cloneNode(true);
+    mainBlock.appendChild(templateMapPinElement);
+  };
 
 
   window.dump = {

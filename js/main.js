@@ -5,8 +5,7 @@
 // var FIELD_MAX_HEIGHT = 630; // Максимальная высота на карте
 
 // Определил ширину карты
-// var map = document.querySelector('.map'); // Вся карта
-// var fieldWidth = map.clientWidth; // Её ширина
+// var fieldWidth = window.util.map.clientWidth; // Её ширина
 
 // ПОКА ПРОДУБЛИРУЮ ИХ ЧИСТО ДЛЯ УДОБСТВА, НО ПОТОМ СУЙ ВСЁ В МОДУЛЬ
 var mapFiltersForm = document.querySelector('.map__filters'); // Форма с фильтрами
@@ -61,9 +60,9 @@ var putActive = function (cards) {
 
 
   /*
-  ОТСЮДА И ДО КОНЦА ДАННОЙ ФУНКЦИИ Я ПОНИМАЮ, ЧТО ЗНАТНУЮ ЕБАНИНУ СДЕЛАЛ, 
+  ОТСЮДА И ДО КОНЦА ДАННОЙ ФУНКЦИИ Я ПОНИМАЮ, ЧТО ЗНАТНУЮ ЕБАНИНУ СДЕЛАЛ,
   НО МНЕ БОЛЬНО УЖ ОХОТА ЗАКРЫТЬ МОДУЛЬ 7
-  ЧИСТО ФОРМАЛЬНО ЗАДАНИЕ Я ВЫПОЛНИЛ, 
+  ЧИСТО ФОРМАЛЬНО ЗАДАНИЕ Я ВЫПОЛНИЛ,
   ТАК ЧТО ПУСТЬ ПОКА ТАК БУДЕТ, ПОТОМ БУДУ ЧИНИТЬ
   */
 
@@ -76,9 +75,8 @@ var putActive = function (cards) {
   var filtredNoMore5 = function (array) {
     window.pin.pinsKiller();
     var newArray = array.slice(0, 5);
-    console.log(newArray);
     return newArray;
-  }
+  };
 
   // Обрезаю массив до максимум 5
   advertItems = filtredNoMore5(advertItems);
@@ -86,7 +84,7 @@ var putActive = function (cards) {
 
   // СЛУШАТЕЛЬ СОБЫТИЯ смены значения селекта НА ФОРМЕ (потому пока действует на все селекты)
   mapFiltersForm.addEventListener('change', function (evt) {
-    if (evt.target.value === "any") {
+    if (evt.target.value === 'any') {
       advertItems = filtredNoMore5(advertItems);
       window.pin.insertTemplate(advertItems, window.pin.renderMapPinTemplate);
     } else {
@@ -94,17 +92,15 @@ var putActive = function (cards) {
       var filteredAdvertItems = cards
       .slice() // Слайс, наставник говорит, тоже лишний
       .filter(function (currentItem) {
-        return currentItem.offer.type == evt.target.value;
+        return currentItem.offer.type == evt.target.value; // Нет, дружище-линтер, замысел именно таков
       });
       filteredAdvertItems = filtredNoMore5(filteredAdvertItems);
       window.pin.insertTemplate(filteredAdvertItems, window.pin.renderMapPinTemplate);
-      };
+    }
   });
-// Для пущей гибкости то, где сейчас тайп - так же должно быть переменной
+  // Для пущей гибкости то, где сейчас тайп - так же должно быть переменной
 
 };
-
-
 
 
 // СЛУШАТЕЛИ СОБЫТИЙ, приводящие карту в активное состояние
@@ -117,8 +113,6 @@ window.pin.mapPinMain.addEventListener('keydown', function (evt) {
     window.dump.load(window.dump.KEKSOBOOKING_UPLOAD_LINK, putActive, window.dump.logMessages);
   }
 });
-
-
 
 
 // БЛОК ДВИГАНЬЯ МЕТКИ
@@ -174,9 +168,7 @@ window.pin.mapPinMain.addEventListener('mousedown', function (evt) {
 });
 
 
-
 // СЛУШАТЕЛЬ СОБЫТИЯ инпута количества комнат (а ему обязательно быть тут? в модуле вроде тоже должен работать)
 window.adForm.roomsAmount.addEventListener('change', function (evt) {
   window.adForm.checkRooms(evt.target.value);
 });
-

@@ -18,6 +18,16 @@
     templateMapPinElement.style.top = innerAdvertItem.location.y + 'px';
     templateMapPinElement.querySelector('img').src = innerAdvertItem.author.avatar;
     templateMapPinElement.querySelector('img').alt = innerAdvertItem.offer.title;
+
+    // Слушатель клика по метке (отрисовка визиток)
+    templateMapPinElement.addEventListener('click', function () {
+      var advertisementCard = window.util.map.querySelector('.map__card');
+      if (advertisementCard) {
+        window.util.map.removeChild(advertisementCard);
+      }
+      window.util.map.appendChild(window.cutaway.renderAdvertisementCard(innerAdvertItem));
+    });
+
     return templateMapPinElement;
   };
 
@@ -47,9 +57,9 @@
   // ФУНКЦИЯ, удаляющая все пины, кроме пользовательского
   var pinsKiller = function () {
     var otherPins = document.querySelectorAll('.map__pin:not(:first-of-type)');
-      for (var i = 0; i < otherPins.length; i++) {
-        otherPins[i].remove(i);
-      }
+    for (var i = 0; i < otherPins.length; i++) {
+      otherPins[i].remove(i);
+    }
   };
 
   window.pin = {

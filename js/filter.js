@@ -3,10 +3,9 @@
 // Модуль фильтрации
 
 (function () {
-
-var mapFiltersForm = document.querySelector('.map__filters'); // Форма с фильтрами
-var mapFiltersFormSelects = mapFiltersForm.querySelectorAll('.map__filter'); // Филдсеты формы фильтрации
-var mapFiltersFormFeature = mapFiltersForm.querySelector('.map__features'); // Дополнительные удобства формы фильтрации
+  var mapFiltersForm = document.querySelector('.map__filters'); // Форма с фильтрами
+  var mapFiltersFormSelects = mapFiltersForm.querySelectorAll('.map__filter'); // Филдсеты формы фильтрации
+  var mapFiltersFormFeature = mapFiltersForm.querySelector('.map__features'); // Дополнительные удобства формы фильтрации
 
 
   window.filter = {
@@ -14,5 +13,5 @@ var mapFiltersFormFeature = mapFiltersForm.querySelector('.map__features'); // �
     mapFiltersFormSelects: mapFiltersFormSelects,
     mapFiltersFormFeature: mapFiltersFormFeature
   };
-  
-  })();
+
+})();
