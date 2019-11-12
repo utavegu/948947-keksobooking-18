@@ -11,10 +11,13 @@
     SPACE_KEYCODE: 32
   };
 
+  var map = document.querySelector('.map'); // Вся карта
+
   window.util = {
     ESC_KEYCODE: HotKey.ESC_KEYCODE,
     ENTER_KEYCODE: HotKey.ENTER_KEYCODE,
-    SPACE_KEYCODE: HotKey.SPACE_KEYCODE
+    SPACE_KEYCODE: HotKey.SPACE_KEYCODE,
+    map: map
   };
 
 })();
