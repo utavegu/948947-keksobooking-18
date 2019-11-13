@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', putInactive);
 
 
 // ФУНКЦИЯ ПРИВОДЯЩАЯ ПРИЛОЖЕНИЕ В АКТИВНОЕ СОСТОЯНИЕ
+// ХУЙНИ ПРОВЕРКУ, ЕСЛИ ДАННЫЕ ПРИШЛИ, ТО БОЛЬШЕ ПУСТЬ ЗАПРОС НЕ ПОСЫЛАЕТ. Или прямо в дампе. Ну кстати да, там логичнее. Прямо с неё и начинать.
 var putActive = function (cards) {
 
   // Карта становится активной
@@ -92,13 +93,21 @@ var putActive = function (cards) {
       var filteredAdvertItems = cards
       .slice() // Слайс, наставник говорит, тоже лишний
       .filter(function (currentItem) {
-        return currentItem.offer.type == evt.target.value; // Нет, дружище-линтер, замысел именно таков
+        return currentItem.offer.type === evt.target.value; // Нет, дружище-линтер, замысел именно таков
       });
       filteredAdvertItems = filtredNoMore5(filteredAdvertItems);
       window.pin.insertTemplate(filteredAdvertItems, window.pin.renderMapPinTemplate);
     }
   });
   // Для пущей гибкости то, где сейчас тайп - так же должно быть переменной
+
+  // Закрытие визитки хоткеем
+  document.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.util.ESC_KEYCODE && document.querySelector('.popup__close')) {
+      window.util.map.removeChild(window.util.map.querySelector('.map__card'));
+    }
+  });
+
 
 };
 
@@ -152,7 +161,7 @@ window.pin.mapPinMain.addEventListener('mousedown', function (evt) {
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
 
-    // Временное решение с shadow evt
+    // БезВременное решение с shadow evt
     if (dragged) {
       var onClickPreventDefault = function (evt1) {
         evt1.preventDefault();
@@ -165,10 +174,4 @@ window.pin.mapPinMain.addEventListener('mousedown', function (evt) {
 
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
-});
-
-
-// СЛУШАТЕЛЬ СОБЫТИЯ инпута количества комнат (а ему обязательно быть тут? в модуле вроде тоже должен работать)
-window.adForm.roomsAmount.addEventListener('change', function (evt) {
-  window.adForm.checkRooms(evt.target.value);
 });
