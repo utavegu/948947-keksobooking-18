@@ -11,15 +11,12 @@
     bungalo: 'Бунгало'
   };
 
-  // Забрал шаблон для визиток (от аватарки до превьюшек фото)
+  // Забрал шаблон для визиток
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
   // Функция отрисовки визиток
   function renderAdvertisementCard(advertisement) {
-    // Клонируем узел вместе с потомками
     var card = cardTemplate.cloneNode(true);
-
-    // Кладём в нужные поля значения данных массива
     card.querySelector('.popup__title').textContent = advertisement.offer.title;
     card.querySelector('.popup__text--address').textContent = advertisement.offer.address;
     card.querySelector('.popup__text--price').textContent = advertisement.offer.price + '₽/ночь';

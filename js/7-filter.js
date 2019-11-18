@@ -85,7 +85,7 @@
       .slice(0, SHOW_MAX_ADS);
   }
 
- 
+
   window.filter = {
     mapFiltersForm: mapFiltersForm,
     mapFiltersFormSelects: mapFiltersFormSelects,

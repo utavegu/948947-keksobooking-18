@@ -21,34 +21,27 @@
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
   var errorElement = errorTemplate.cloneNode(true);
 
-
   // ПОЛУЧЕНИЕ ДАННЫХ
-  var load = function (url, onSuccess, onError) {
-    var xhr = new XMLHttpRequest(); // Инициализировал объект
-    xhr.responseType = 'json'; // Сказал в каком формате хочу данные
-    xhr.timeout = DUMP_TIMEOUT; // Не дольше 10 секунд
-
-    xhr.addEventListener('load', function () { // Если загрузка прошла успешно
-      if (xhr.status === ServerResponseCode.SUCCESS) { // И статус ответа что надо
-        onSuccess(xhr.response); // Верни данные
+  var load = function (url, onSuccess, onErrorArg) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+    xhr.timeout = DUMP_TIMEOUT;
+    xhr.addEventListener('load', function () {
+      if (xhr.status === ServerResponseCode.SUCCESS) {
+        onSuccess(xhr.response);
       } else {
-        onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText); // Иначе отобрази статус ответа и его текст
+        onErrorArg('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
-
-    xhr.addEventListener('error', function () { // Если в запросе произошла ошибка
-      onError('Ошибка соединения'); // Сообщи об этом
+    xhr.addEventListener('error', function () {
+      onError('Ошибка соединения');
     });
-
-    xhr.addEventListener('timeout', function () { // Если заданный интервал превышен
-      onError('Запрос не успел выполниться за ' + xhr.timeout / 1000 + ' сек.'); // Выдай ошибку и объясни в чём дело
+    xhr.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за ' + xhr.timeout / 1000 + ' сек.');
     });
-
-    // По идее эти 2 действия по порядку идут 2 и 3, но так правильнее
-    xhr.open('GET', url); // Открываю соединение
-    xhr.send(); // Посылаю запрос
+    xhr.open('GET', url);
+    xhr.send();
   };
-
 
   // Сообщение об ошибке при загрузке данных с сервера
   var logMessages = function () {
@@ -57,10 +50,6 @@
     var templateMapPinElement = errorTemplateElement.cloneNode(true);
     mainBlock.appendChild(templateMapPinElement);
   };
-
-
-
-
 
   // ОТПРАВКА ДАННЫХ
   function sendFormData(adForm, callback) {
@@ -78,16 +67,19 @@
     });
   }
 
+  // Обработчик удаления окна об ошибке при клике на любой точке экрана
   function onBodyClick() {
     removeErrorPopup(errorElement);
   }
 
+  // Аналогично, но при нажатии эскейпа
   function onEscPress(evt) {
     if (evt.keyCode === window.util.ESC_KEYCODE) {
       removeErrorPopup(errorElement);
     }
   }
 
+  // Сообщение об ошибке
   function onError(message) {
     errorElement.querySelector('.error__message').textContent = message;
     document.body.querySelector('main').appendChild(errorElement);
@@ -95,12 +87,12 @@
     document.addEventListener('keydown', onEscPress);
   }
 
+  // Удаление окна об ошибке
   function removeErrorPopup(error) {
     document.body.querySelector('main').removeChild(error);
     document.body.removeEventListener('click', onBodyClick);
     document.removeEventListener('keydown', onEscPress);
   }
-
 
   window.dump = {
     KEKSOBOOKING_UPLOAD_LINK: Link.KEKSOBOOKING_UPLOAD_LINK,
