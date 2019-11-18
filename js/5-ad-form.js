@@ -70,7 +70,7 @@
     if (pricePerNight.validity.rangeOverflow) {
       pricePerNight.setCustomValidity('Не более 1 000 000 рублей');
     } else if (pricePerNight.validity.rangeUnderflow) {
-      pricePerNight.setCustomValidity('Не менее 0 рублей');
+      pricePerNight.setCustomValidity('Данные не корректны');
     } else if (pricePerNight.validity.valueMissing) {
       pricePerNight.setCustomValidity('Обязательно для заполнения. И только цифры!');
     } else {
