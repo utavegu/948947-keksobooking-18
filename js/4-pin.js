@@ -122,6 +122,7 @@
 
       // Данные для поля "Адрес"
       twoCoords.value = ((mapPinMain.offsetLeft - shift.x) + ', ' + ((mapPinMain.offsetTop - shift.y) + SHARP_END));
+      window.superCrutch = twoCoords.value;
 
       // Ограничитель движения метки по вертикали
       if (parseInt(target.style.top, 10) < Limits.TOP) {
@@ -176,7 +177,8 @@
     mapPinMainY: mapPinMainY,
     mapPinMainWidth: mapPinMainWidth,
     mapPinMainHeight: mapPinMainHeight,
-    pinsKiller: pinsKiller
+    pinsKiller: pinsKiller,
+    twoCoords: twoCoords
   };
 
 })();

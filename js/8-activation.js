@@ -2,16 +2,6 @@
 // ТАК, ТЕБЯ ТО ТОЖЕ НАДО БЫ САМОВЫЗЫВАЮЩЕЙСЯ ИНКАПСУЛИРОВАНОЙ ФУНКЦИЕЙ СДЕЛАТЬ
 // Бывший мэйн.джээс
 
-// var COUNT_OF_ADVERT = 8; // Количество объявлений
-// var FIELD_MIN_HEIGHT = 130; // Минимальная высота на карте
-// var FIELD_MAX_HEIGHT = 630; // Максимальная высота на карте
-
-
-
-// ПОКА ПРОДУБЛИРУЮ ИХ ЧИСТО ДЛЯ УДОБСТВА, НО ПОТОМ СУЙ ВСЁ В МОДУЛЬ (фильтрации)
-var mapFiltersForm = document.querySelector('.map__filters'); // Форма с фильтрами
-var mapFiltersFormSelects = mapFiltersForm.querySelectorAll('.map__filter'); // Филдсеты формы фильтрации
-var mapFiltersFormFeature = mapFiltersForm.querySelector('.map__features'); // Дополнительные удобства формы фильтрации
 
 // ФУНКЦИЯ, показывающая карту
 var showMapElement = function (desiredSelector, deletedClass) {
@@ -27,7 +17,7 @@ var hideMapElement = function (addedSelector, addedClass) {
 
 // СЛУШАТЕЛЬ СОБЫТИЙ, приводящий страницу в неактивное состояние
 document.addEventListener('DOMContentLoaded', function () {
-  putInactive(window.adForm.advertFormFieldsets, mapFiltersFormSelects, mapFiltersFormFeature, window.adForm.guestsAmount);
+  putInactive(window.adForm.advertFormFieldsets, window.filter.mapFiltersFormSelects, window.filter.mapFiltersFormFeature, window.adForm.guestsAmount);
 });
 
 // ФУНКЦИЯ ПРИВОДЯЩАЯ ПРИЛОЖЕНИЕ В АКТИВНОЕ СОСТОЯНИЕ
@@ -45,53 +35,31 @@ var putActive = function (cards) {
   }
 
   // Форма фильтрации становится активной (В ФУНКЦИЮ)
-  for (var j = 0; j < mapFiltersFormSelects.length; j++) {
-    mapFiltersFormSelects[j].removeAttribute('disabled');
+  for (var j = 0; j < window.filter.mapFiltersFormSelects.length; j++) {
+    window.filter.mapFiltersFormSelects[j].removeAttribute('disabled');
   }
   // И её блок с дополнительными удобствами
-  mapFiltersFormFeature.removeAttribute('disabled');
+  window.filter.mapFiltersFormFeature.removeAttribute('disabled');
 
-  /*
-  ОТСЮДА И ДО КОНЦА ДАННОЙ ФУНКЦИИ Я ПОНИМАЮ, ЧТО ЗНАТНУЮ ЕБАНИНУ СДЕЛАЛ,
-  НО МНЕ БОЛЬНО УЖ ОХОТА ЗАКРЫТЬ МОДУЛЬ 7
-  ЧИСТО ФОРМАЛЬНО ЗАДАНИЕ Я ВЫПОЛНИЛ,
-  ТАК ЧТО ПУСТЬ ПОКА ТАК БУДЕТ, ПОТОМ БУДУ ЧИНИТЬ
-  */
+  // Удаляю слушатель клика на главной метке
+  window.pin.mapPinMain.removeEventListener('mousedown', start);
 
   // Полученные с сервера данные положил в переменную
   var advertItems = cards;
-  // И отрисуем их все
-  window.pin.insertTemplate(advertItems, window.pin.renderMapPinTemplate);
+  // И отрисуем их все (всё, лишнее, удали потом)
+  window.pin.insertTemplate(advertItems.slice(0, window.filter.SHOW_MAX_ADS), window.pin.renderMapPinTemplate);
 
-  // Функция для отображения не более 5 пинов
-  var filtredNoMore5 = function (array) {
-    window.pin.pinsKiller();
-    var newArray = array.slice(0, 5);
-    return newArray;
-  };
 
-  // Обрезаю массив до максимум 5
-  advertItems = filtredNoMore5(advertItems);
-  // Отрисовываю 5 элементов
-  window.pin.insertTemplate(advertItems, window.pin.renderMapPinTemplate);
+  // Слушаю на форме фильтрации события смены селектов
+  window.filter.mapFiltersForm.addEventListener('change', window.debounce(function () {
+    if (document.querySelector('.popup__close')) {
+      window.util.map.removeChild(window.util.map.querySelector('.map__card'));
+    } // Чищу визитки
+      window.pin.pinsKiller(); // И чужие пины
+      window.pin.insertTemplate(window.filter.multyfilter(advertItems), window.pin.renderMapPinTemplate); // Отрисовываю
+    })
+);
 
-  // СЛУШАТЕЛЬ СОБЫТИЯ смены значения селекта НА ФОРМЕ (потому пока действует на все селекты)
-  mapFiltersForm.addEventListener('change', function (evt) {
-    if (evt.target.value === 'any') {
-      advertItems = filtredNoMore5(advertItems);
-      window.pin.insertTemplate(advertItems, window.pin.renderMapPinTemplate);
-    } else {
-      window.pin.pinsKiller();
-      var filteredAdvertItems = cards
-      .slice() // Слайс, наставник говорит, тоже лишний
-      .filter(function (currentItem) {
-        return currentItem.offer.type === evt.target.value;
-      });
-      filteredAdvertItems = filtredNoMore5(filteredAdvertItems);
-      window.pin.insertTemplate(filteredAdvertItems, window.pin.renderMapPinTemplate);
-    }
-  });
-  // Для пущей гибкости то, где сейчас тайп - так же должно быть переменной
 
   // Закрытие визитки хоткеем (ты нафига тут?)
   document.addEventListener('keydown', function (evt) {
@@ -100,18 +68,20 @@ var putActive = function (cards) {
     }
   });
 
-  
-
 };
 
-// СЛУШАТЕЛИ СОБЫТИЙ, приводящие карту в активное состояние
-window.pin.mapPinMain.addEventListener('mousedown', function () {
+
+// Это чтобы я мог тебя грохнуть после активации
+var start = function () {
   window.dump.load(window.dump.KEKSOBOOKING_UPLOAD_LINK, putActive, window.dump.logMessages);
-});
+}
+
+// СЛУШАТЕЛИ СОБЫТИЙ, приводящие карту в активное состояние
+window.pin.mapPinMain.addEventListener('mousedown', start);
 
 window.pin.mapPinMain.addEventListener('keydown', function (evt) {
   if (evt.keyCode === window.util.ENTER_KEYCODE) {
-    window.dump.load(window.dump.KEKSOBOOKING_UPLOAD_LINK, putActive, window.dump.logMessages);
+    start();
   }
 });
 
@@ -119,9 +89,11 @@ window.pin.mapPinMain.addEventListener('keydown', function (evt) {
 
 // ОТСЮДА И НИЖЕ - всё, что касается отправки формы на сервер
 
+// Шаблон уведомления об успешной отправке
 var successTemplate = document.querySelector('#success').content.querySelector('.success');
 var successElement = successTemplate.cloneNode(true);
 
+// Удаление уведомления об успешной отправке формы
 function removeSuccessPopup(element) {
   if (element) {
     document.body.querySelector('main').removeChild(element);
@@ -160,16 +132,20 @@ function removeSuccessPopup(element) {
     hideMapElement('.map', 'map--faded');
   };
 
-
+// ФУНКЦИЯ, делающая все дела после успешной отправки формы и закрытия попапа
 var refreshApp = function () {
-  putInactive(window.adForm.advertFormFieldsets, mapFiltersFormSelects, mapFiltersFormFeature, window.adForm.guestsAmount); // Вызываю функцию деактивации приложения, КОТОРУЮ НАДО ДОПИЛИТЬ И ПЕРЕДЕЛАТЬ
+  putInactive(window.adForm.advertFormFieldsets, window.filter.mapFiltersFormSelects, window.filter.mapFiltersFormFeature, window.adForm.guestsAmount); // Вызываю функцию деактивации приложения, КОТОРУЮ НАДО ДОПИЛИТЬ И ПЕРЕДЕЛАТЬ
   window.adForm.advertForm.reset(); // Сброс значений полей формы объявления
+  window.filter.mapFiltersForm.reset(); // Сброс значений полей формы фильтрации
   window.adForm.advertForm.classList.add('ad-form--disabled'); // Затуманиваю форму объявления
   window.pin.mapPinMain.style.left = "570px" // Возвращаю главную метку в исходное положение по горизонтали
   window.pin.mapPinMain.style.top = "375px" // Возвращаю главную метку в исходное положение по вертикали
-  window.adForm.inputAddress.value = (window.pin.mapPinMainX - Math.round(window.pin.mapPinMainWidth / 2)) + ', ' + (window.pin.mapPinMainY - Math.round(window.pin.mapPinMainHeight / 2) + 49); // Прописываю координаты метки в поле адреса
+  window.adForm.inputAddress.value = (window.pin.mapPinMainX - Math.round(window.pin.mapPinMainWidth / 2)) + ', ' + (window.pin.mapPinMainY - Math.round(window.pin.mapPinMainHeight / 2) + 49); // Прописываю НАЧАЛЬНЫЕ координаты метки в поле адреса
   window.pin.pinsKiller(); // Чищу другие пины
-  window.util.map.removeChild(window.util.map.querySelector('.map__card')); // Удаляю карточку-визитку другого пина
+  if (document.querySelector('.popup__close')) {
+    window.util.map.removeChild(window.util.map.querySelector('.map__card'));
+  } // Удаляю карточку-визитку другого пина
+  window.pin.mapPinMain.addEventListener('mousedown', start); // Возвращаю обработчик клика по главной метке... А ОН НЕ ВОЗВРАЩАЕТСЯ
 }
 
 function onBodyClick() {
@@ -191,10 +167,19 @@ function onFormSubmit(evt) {
     document.body.querySelector('main').appendChild(successElement);
     document.body.addEventListener('click', onBodyClick);
     document.addEventListener('keydown', onEscPress);
-    // resetPage();
   });
 }
 
 // Слушатель на форме объявления события отправки формы
 window.adForm.advertForm.addEventListener('submit', onFormSubmit);
+
+function onFormReset(evt) {
+  evt.preventDefault();
+  window.adForm.advertForm.reset(); // Сброс значений полей формы объявления
+  window.adForm.inputAddress.value = window.superCrutch;
+}
+
+// Слушатель на форме объявления события очистки полей
+var resetButton = window.adForm.advertForm.querySelector('.ad-form__reset');
+resetButton.addEventListener('click', onFormReset);
 
