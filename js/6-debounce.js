@@ -1,5 +1,7 @@
 'use strict';
 
+// Модуль устранения дребезга
+
 (function () {
   var DEBOUNCE_INTERVAL = 500;
 
