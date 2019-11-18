@@ -4,7 +4,8 @@
 
 (function () {
 
-  var Limits = { // Ограничение по:
+  // Ограничение по:
+  var Limits = {
     TOP: 130, // Верху
     BOTTOM: 630 // Низу
   };
