@@ -4,18 +4,18 @@
 
 (function () {
 
-  // Ограничение по:
+  var SHARP_END = 0; // 49 От центра метки до острого конца
+
+  // Ограничение по (с поправкой на ветер):
   var Limits = {
-    TOP: 130, // Верху
-    BOTTOM: 630 // Низу
+    TOP: 132, // Верху
+    BOTTOM: 708 // Низу
   };
 
   var PinMain = {
     WIDTH: 40, // Ширина главной метки
     HEIGHT: 80 // Высота главной метки
   };
-
-  var SHARP_END = 49; // От центра метки до острого конца
 
   var twoCoords = document.querySelector('#address'); // Поле адреса формы подачи объявления
 
@@ -34,11 +34,13 @@
     templateMapPinElement.querySelector('img').alt = innerAdvertItem.offer.title;
 
     // Слушатель клика по метке (отрисовка визиток)
-    templateMapPinElement.addEventListener('click', function () {
+    templateMapPinElement.addEventListener('click', function (evt) {
       var advertisementCard = window.util.map.querySelector('.map__card');
       if (advertisementCard) {
         window.util.map.removeChild(advertisementCard);
       }
+      window.cutaway.deleteActiveSign(similarMapPinsListElement);
+      evt.currentTarget.classList.add('map__pin--active');
       window.util.map.appendChild(window.cutaway.renderAdvertisementCard(innerAdvertItem));
     });
 
@@ -97,7 +99,6 @@
       mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
       mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
       twoCoords.value = ((mapPinMain.offsetLeft - shift.x) + ', ' + ((mapPinMain.offsetTop - shift.y) + SHARP_END));
-      window.superCrutch = twoCoords.value;
 
       // Ограничитель движения метки по вертикали
       if (parseInt(target.style.top, 10) < Limits.TOP) {

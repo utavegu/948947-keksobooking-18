@@ -3,11 +3,13 @@
 // Модуль фильтрации
 
 (function () {
+
+  var SHOW_MAX_ADS = 5; // Лимит отображаемых объявлений
+
   var mapFiltersForm = document.querySelector('.map__filters'); // Форма с фильтрами
   var mapFiltersFormSelects = mapFiltersForm.querySelectorAll('.map__filter'); // Филдсеты формы фильтрации
   var mapFiltersFormFeature = mapFiltersForm.querySelector('.map__features'); // Дополнительные удобства формы фильтрации
 
-  var SHOW_MAX_ADS = 5; // Лимит отображаемых объявлений
   var housingType = mapFiltersForm.querySelector('#housing-type'); // Выбор типа жилья
   var housingPrice = mapFiltersForm.querySelector('#housing-price'); // Выбор цены
   var housingRooms = mapFiltersForm.querySelector('#housing-rooms'); // Выбор количества комнат
