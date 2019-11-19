@@ -4,6 +4,8 @@
 
 (function () {
 
+  var DUMP_TIMEOUT = 10000; // В одной секунде - 1000 миллисекунд!
+
   var Link = {
     KEKSOBOOKING_UPLOAD_LINK: 'https://js.dump.academy/keksobooking/data',
     KEKSOBOOKING_SEND_LINK: 'https://js.dump.academy/keksobooking'
@@ -15,8 +17,6 @@
     NOT_FOUND_ERROR: 404,
     SERVER_ERROR: 500
   };
-
-  var DUMP_TIMEOUT = 10000; // В одной секунде - 1000 миллисекунд!
 
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
   var errorElement = errorTemplate.cloneNode(true);
@@ -55,6 +55,7 @@
   function sendFormData(adForm, callback) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
+    xhr.timeout = DUMP_TIMEOUT;
     xhr.open('POST', Link.KEKSOBOOKING_SEND_LINK);
     xhr.send(new FormData(adForm));
 
@@ -65,6 +66,15 @@
         onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
+
+    xhr.addEventListener('error', function () {
+      onError('Ошибка соединения!');
+    });
+
+    xhr.addEventListener('timeout', function () {
+      onError('Превышено время ожидания в ' + xhr.timeout + 'мс');
+    });
+
   }
 
   // Обработчик удаления окна об ошибке при клике на любой точке экрана

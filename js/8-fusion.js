@@ -59,13 +59,6 @@
       window.pin.insertTemplate(window.filter.multyfilter(advertItems), window.pin.renderMapPinTemplate); // Отрисовываю
     }));
 
-    // Закрытие визитки хоткеем
-    document.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === window.util.ESC_KEYCODE && document.querySelector('.popup__close')) {
-        window.util.map.removeChild(window.util.map.querySelector('.map__card'));
-      }
-    });
-
   };
 
   // Для удаления обработчика
@@ -161,15 +154,11 @@
   // Слушатель на форме объявления события отправки формы
   window.adForm.advertForm.addEventListener('submit', onFormSubmit);
 
-  // Функция для очистки полей формы подачи объявления
-  function onFormReset(evt) {
-    evt.preventDefault();
-    window.adForm.advertForm.reset();
-    window.adForm.inputAddress.value = window.superCrutch;
-  }
-
   // Слушатель на форме объявления события очистки полей
   var resetButton = window.adForm.advertForm.querySelector('.ad-form__reset');
-  resetButton.addEventListener('click', onFormReset);
+  resetButton.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    refreshApp();
+  });
 
 })();

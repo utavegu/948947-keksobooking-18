@@ -56,10 +56,29 @@
     // Обработчик закрытия карточки
     card.querySelector('.popup__close').addEventListener('click', function () {
       window.util.map.removeChild(window.util.map.querySelector('.map__card'));
+      deleteActiveSign(document.querySelector('.map__pins'));
+    });
+
+    // Закрытие визитки хоткеем
+    document.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === window.util.ESC_KEYCODE && document.querySelector('.popup__close')) {
+        window.util.map.removeChild(window.util.map.querySelector('.map__card'));
+        deleteActiveSign(document.querySelector('.map__pins'));
+      }
     });
 
     return card;
   }
 
-  window.cutaway = {renderAdvertisementCard: renderAdvertisementCard};
+  // Функция, удаляющая признак активности у других меток
+  var deleteActiveSign = function (pinSimilar) {
+    for (var i = 0; i < pinSimilar.children.length; i++) {
+      pinSimilar.children[i].classList.remove('map__pin--active');
+    }
+  };
+
+  window.cutaway = {
+    renderAdvertisementCard: renderAdvertisementCard,
+    deleteActiveSign: deleteActiveSign
+  };
 })();
