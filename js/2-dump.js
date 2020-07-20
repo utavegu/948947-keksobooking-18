@@ -7,8 +7,13 @@
   var DUMP_TIMEOUT = 10000; // В одной секунде - 1000 миллисекунд!
 
   var Link = {
+    /*
+    Старые адреса
     KEKSOBOOKING_UPLOAD_LINK: 'https://js.dump.academy/keksobooking/data',
     KEKSOBOOKING_SEND_LINK: 'https://js.dump.academy/keksobooking'
+    */
+    KEKSOBOOKING_UPLOAD_LINK: 'https://javascript.pages.academy/keksobooking/data',
+    KEKSOBOOKING_SEND_LINK: 'https://javascript.pages.academy/keksobooking'
   };
 
   var ServerResponseCode = {
